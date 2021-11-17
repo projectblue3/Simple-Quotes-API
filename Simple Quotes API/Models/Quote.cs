@@ -17,6 +17,9 @@ namespace Simple_Quotes_API.Models
         public string Text { get; set; }
 
         [Required]
+        public int QuoteAuthorId { get; set; }
+
+        [Required]
         public virtual Author Author { get; set; }
     }
 }
