@@ -10,9 +10,11 @@ namespace Simple_Quotes_API.Services
     {
         ICollection<Author> GetAuthors();
         Author GetAuthor(int authorID);
+        Author GetAuthor(string authorName);
         ICollection<Quote> GetQuotesByAuthor(int authorID);
         bool AuthorExists(int authorId);
-        bool CreateAuthor(Author author);
+        bool AuthorExists(string authorName);
+        void CreateAuthor(Author author);
         bool UpdateAuthor(Author author);
         bool DeleteAuthor(Author author);
         bool SaveChanges();

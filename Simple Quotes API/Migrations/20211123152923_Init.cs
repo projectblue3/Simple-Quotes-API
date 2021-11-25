@@ -2,7 +2,7 @@
 
 namespace Simple_Quotes_API.Migrations
 {
-    public partial class InitialDbCreation : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,23 +26,29 @@ namespace Simple_Quotes_API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    QuoteAuthorId = table.Column<int>(type: "int", nullable: false)
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Quotes_Authors_QuoteAuthorId",
-                        column: x => x.QuoteAuthorId,
+                        name: "FK_Quotes_Authors_AuthorId",
+                        column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Quotes_QuoteAuthorId",
+                name: "IX_Authors_Name",
+                table: "Authors",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quotes_AuthorId",
                 table: "Quotes",
-                column: "QuoteAuthorId");
+                column: "AuthorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

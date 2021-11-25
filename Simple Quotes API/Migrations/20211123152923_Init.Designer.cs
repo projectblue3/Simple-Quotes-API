@@ -9,8 +9,8 @@ using Simple_Quotes_API.Services;
 namespace Simple_Quotes_API.Migrations
 {
     [DbContext(typeof(QuotesDbContext))]
-    [Migration("20211117204434_InitialDbCreation")]
-    partial class InitialDbCreation
+    [Migration("20211123152923_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,9 @@ namespace Simple_Quotes_API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Authors");
                 });
 
@@ -44,7 +47,7 @@ namespace Simple_Quotes_API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("QuoteAuthorId")
+                    b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -54,7 +57,7 @@ namespace Simple_Quotes_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuoteAuthorId");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Quotes");
                 });
@@ -63,7 +66,7 @@ namespace Simple_Quotes_API.Migrations
                 {
                     b.HasOne("Simple_Quotes_API.Models.Author", "Author")
                         .WithMany("Quotes")
-                        .HasForeignKey("QuoteAuthorId")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

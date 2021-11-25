@@ -11,15 +11,7 @@ namespace Simple_Quotes_API.Services
     {
         public QuotesDbContext(DbContextOptions<QuotesDbContext> options) : base(options)
         {
-            Database.Migrate();
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Quote>()
-                .HasOne<Author>(q => q.Author)
-                .WithMany(a => a.Quotes)
-                .HasForeignKey(q => q.QuoteAuthorId);
+            //Database.Migrate();
         }
 
         public virtual DbSet<Quote> Quotes { get; set; }
