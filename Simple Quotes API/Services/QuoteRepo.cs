@@ -21,7 +21,8 @@ namespace Simple_Quotes_API.Services
 
         public bool DeleteQuote(Quote quote)
         {
-            throw new NotImplementedException();
+            _quoteContext.Remove(quote);
+            return SaveChanges();
         }
 
         public Quote GetQuote(int quoteId)
@@ -34,9 +35,14 @@ namespace Simple_Quotes_API.Services
             return _quoteContext.Quotes.Include(q => q.Author).ToList();
         }
 
+        public bool QuoteExists(string quoteText)
+        {
+            return _quoteContext.Quotes.Any(q => q.Text == quoteText);
+        }
+
         public bool QuoteExists(int quoteId)
         {
-            throw new NotImplementedException();
+            return _quoteContext.Quotes.Any(q => q.Id == quoteId);
         }
 
         public bool SaveChanges()

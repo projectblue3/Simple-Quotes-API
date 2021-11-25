@@ -32,7 +32,8 @@ namespace Simple_Quotes_API.Services
 
         public bool DeleteAuthor(Author author)
         {
-            throw new NotImplementedException();
+            _authorContext.Remove(author);
+            return SaveChanges();
         }
 
         public Author GetAuthor(int authorID)

@@ -125,5 +125,33 @@ namespace Simple_Quotes_API.Controllers
 
             return CreatedAtRoute(nameof(GetAuthorById), new { authorId = authorToCreate.Id }, authorToCreate);
         }
+
+        [HttpDelete]
+        public IActionResult DeleteAuthor(int authorId)
+        {
+            var authorToDelete = _authorRepo.GetAuthor(authorId);
+
+            if (authorToDelete == null)
+            {
+                return NotFound();
+            }
+
+            if (_authorRepo.GetQuotesByAuthor(authorId).Count() > 0)
+            {
+                ModelState.AddModelError("AuthorDeleteError","Cannot delete an author who has quotes");
+                return StatusCode(409, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_authorRepo.DeleteAuthor(authorToDelete))
+            {
+                ModelState.AddModelError("AuthorDeleteError", $"Something went wrong deleting the author");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

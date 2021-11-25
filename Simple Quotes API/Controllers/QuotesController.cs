@@ -89,10 +89,39 @@ namespace Simple_Quotes_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (_quoteRepo.QuoteExists(quoteToCreate.Text))
+            {
+                ModelState.AddModelError("QuoteExists", "This quote already exists");
+                return StatusCode(422, ModelState);
+            }
+
             _quoteRepo.CreateQuote(quoteToCreate);
             _quoteRepo.SaveChanges();
 
             return CreatedAtRoute(nameof(GetQuoteById), new { quoteId = quoteToCreate.Id }, quoteToCreate);
+        }
+
+        //DELETE api/quotes/id
+        [HttpDelete]
+        public IActionResult DeleteQuote(int quoteId)
+        {
+            var quoteToDelete = _quoteRepo.GetQuote(quoteId);
+
+            if (quoteToDelete == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_quoteRepo.DeleteQuote(quoteToDelete))
+            {
+                ModelState.AddModelError("QuoteDeleteError", $"Something went wrong deleting quote");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
         }
     }
 }

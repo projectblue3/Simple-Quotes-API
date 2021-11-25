@@ -10,6 +10,7 @@ namespace Simple_Quotes_API.Services
     {
         ICollection<Quote> GetQuotes();
         Quote GetQuote(int quoteId);
+        bool QuoteExists(string quoteText);
         bool QuoteExists(int quoteId);
         void CreateQuote(Quote quote);
         bool UpdateQuote(Quote quote);
