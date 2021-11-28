@@ -61,9 +61,9 @@ namespace Simple_Quotes_API.Services
             return _authorContext.SaveChanges() >= 0 ? true : false;
         }
 
-        public bool UpdateAuthor(Author author)
+        public bool UpdateAuthor()
         {
-            throw new NotImplementedException();
+            return SaveChanges();
         }
     }
 }

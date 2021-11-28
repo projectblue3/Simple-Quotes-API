@@ -50,9 +50,9 @@ namespace Simple_Quotes_API.Services
             return _quoteContext.SaveChanges() >= 0 ? true : false;
         }
 
-        public bool UpdateQuote(Quote quote)
+        public bool UpdateQuote()
         {
-            throw new NotImplementedException();
+            return SaveChanges();
         }
     }
 }

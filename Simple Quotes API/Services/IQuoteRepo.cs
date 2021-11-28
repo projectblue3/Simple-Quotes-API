@@ -13,7 +13,7 @@ namespace Simple_Quotes_API.Services
         bool QuoteExists(string quoteText);
         bool QuoteExists(int quoteId);
         void CreateQuote(Quote quote);
-        bool UpdateQuote(Quote quote);
+        bool UpdateQuote();
         bool DeleteQuote(Quote quote);
         bool SaveChanges();
     }

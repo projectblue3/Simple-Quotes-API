@@ -12,8 +12,8 @@ namespace Simple_Quotes_API.Profiles
     {
         public AuthorsProfile()
         {
-            CreateMap<Author, AuthorReadDto>();
-            CreateMap<AuthorCreateDto, Author>();
+            CreateMap<AuthorUpdateDto, Author>();
+            CreateMap<Author, AuthorUpdateDto>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Simple_Quotes_API.Dtos;
 using Simple_Quotes_API.Models;
 using Simple_Quotes_API.Services;
@@ -16,12 +18,14 @@ namespace Simple_Quotes_API.Controllers
         //Repo fields
         private readonly IAuthorRepo _authorRepo;
         private readonly IQuoteRepo _quoteRepo;
+        private readonly IMapper _mapper;
 
         //Controller Constructor
-        public QuotesController(IAuthorRepo authorRepo, IQuoteRepo quoteRepo)
+        public QuotesController(IAuthorRepo authorRepo, IQuoteRepo quoteRepo, IMapper mapper)
         {
             _authorRepo = authorRepo;
             _quoteRepo = quoteRepo;
+            _mapper = mapper;
         }
 
         //GET api/quotes
@@ -118,6 +122,40 @@ namespace Simple_Quotes_API.Controllers
             if (!_quoteRepo.DeleteQuote(quoteToDelete))
             {
                 ModelState.AddModelError("QuoteDeleteError", $"Something went wrong deleting quote");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        //PATCH api/quotes/id
+        [HttpPatch("{quoteId}")]
+        public IActionResult PatchQuote(int quoteId, [FromBody] JsonPatchDocument<QuoteUpdateDto> quotePatch)
+        {
+            var repoQuote = _quoteRepo.GetQuote(quoteId);
+
+            if (repoQuote == null)
+            {
+                return NotFound();
+            }
+
+            var quoteToUpdate = _mapper.Map<QuoteUpdateDto>(repoQuote);
+
+            quotePatch.ApplyTo(quoteToUpdate, ModelState);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!TryValidateModel(quoteToUpdate))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(quoteToUpdate, repoQuote);
+
+            if (!_quoteRepo.UpdateQuote())
+            {
+                ModelState.AddModelError("QuoteUpdateError", $"Something went wrong updating quote");
                 return StatusCode(500, ModelState);
             }
 

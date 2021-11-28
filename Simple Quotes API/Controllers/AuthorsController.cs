@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Simple_Quotes_API.Dtos;
 using Simple_Quotes_API.Models;
 using Simple_Quotes_API.Services;
@@ -16,12 +18,14 @@ namespace Simple_Quotes_API.Controllers
         //Repo fields
         private readonly IAuthorRepo _authorRepo;
         private readonly IQuoteRepo _quoteRepo;
+        private readonly IMapper _mapper;
 
         //Controller Constructor
-        public AuthorsController(IAuthorRepo authorRepo, IQuoteRepo quoteRepo)
+        public AuthorsController(IAuthorRepo authorRepo, IQuoteRepo quoteRepo, IMapper mapper)
         {
             _authorRepo = authorRepo;
             _quoteRepo = quoteRepo;
+            _mapper = mapper;
         }
 
         //GET api/authors
@@ -126,6 +130,7 @@ namespace Simple_Quotes_API.Controllers
             return CreatedAtRoute(nameof(GetAuthorById), new { authorId = authorToCreate.Id }, authorToCreate);
         }
 
+        //DELETE api/authors/id
         [HttpDelete]
         public IActionResult DeleteAuthor(int authorId)
         {
@@ -148,6 +153,40 @@ namespace Simple_Quotes_API.Controllers
             if (!_authorRepo.DeleteAuthor(authorToDelete))
             {
                 ModelState.AddModelError("AuthorDeleteError", $"Something went wrong deleting the author");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        //PATCH api/authors/id
+        [HttpPatch("{authorId}")]
+        public IActionResult PatchAuthor(int authorId, [FromBody] JsonPatchDocument<AuthorUpdateDto> authorPatch)
+        {
+            var repoAuthor = _authorRepo.GetAuthor(authorId);
+
+            if (repoAuthor == null)
+            {
+                return NotFound();
+            }
+
+            var authorToUpdate = _mapper.Map<AuthorUpdateDto>(repoAuthor);
+
+            authorPatch.ApplyTo(authorToUpdate, ModelState);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!TryValidateModel(authorToUpdate))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(authorToUpdate, repoAuthor);
+
+            if (!_authorRepo.UpdateAuthor())
+            {
+                ModelState.AddModelError("AuthorUpdateError", $"Something went wrong updating the author");
                 return StatusCode(500, ModelState);
             }
 

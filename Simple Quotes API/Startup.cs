@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Newtonsoft.Json.Serialization;
 
 namespace Simple_Quotes_API
 {
@@ -33,8 +34,13 @@ namespace Simple_Quotes_API
                 options.UseSqlServer(Configuration.GetConnectionString("QuotesCS")));
 
             services.AddMvc()
-                    .AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = 
-                        Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                    .AddNewtonsoftJson(o => {
+                        o.SerializerSettings.ReferenceLoopHandling =
+                            Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+                        o.SerializerSettings.ContractResolver = 
+                            new CamelCasePropertyNamesContractResolver();
+                    });
 
             services.AddSwaggerGen(c =>
             {
