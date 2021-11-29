@@ -14,9 +14,10 @@ namespace Simple_Quotes_API.Services
         {
             _quoteContext = quoteContext;
         }
-        public void CreateQuote(Quote quote)
+        public bool CreateQuote(Quote quote)
         {
             _quoteContext.Quotes.Add(quote);
+            return SaveChanges();
         }
 
         public bool DeleteQuote(Quote quote)

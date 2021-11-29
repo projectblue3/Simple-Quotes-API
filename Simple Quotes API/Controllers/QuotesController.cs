@@ -99,8 +99,16 @@ namespace Simple_Quotes_API.Controllers
                 return StatusCode(422, ModelState);
             }
 
-            _quoteRepo.CreateQuote(quoteToCreate);
-            _quoteRepo.SaveChanges();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_quoteRepo.CreateQuote(quoteToCreate))
+            {
+                ModelState.AddModelError("QuoteCreationError", $"Something went wrong creating the quote");
+                return StatusCode(500, ModelState);
+            }
 
             return CreatedAtRoute(nameof(GetQuoteById), new { quoteId = quoteToCreate.Id }, quoteToCreate);
         }

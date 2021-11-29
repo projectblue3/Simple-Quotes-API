@@ -14,7 +14,7 @@ namespace Simple_Quotes_API.Services
         ICollection<Quote> GetQuotesByAuthor(int authorID);
         bool AuthorExists(int authorId);
         bool AuthorExists(string authorName);
-        void CreateAuthor(Author author);
+        bool CreateAuthor(Author author);
         bool UpdateAuthor();
         bool DeleteAuthor(Author author);
         bool SaveChanges();

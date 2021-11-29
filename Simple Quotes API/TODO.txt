@@ -1,6 +1,3 @@
-﻿Add update method
-Change repo back to bool for error handling
-Maybe convert to async
-test what would happen if you create a quote with an invalid author
-repo error handling
+﻿Maybe convert to async
+error handling
 Fix quote FK error when changing author if possible

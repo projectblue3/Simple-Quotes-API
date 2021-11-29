@@ -25,9 +25,10 @@ namespace Simple_Quotes_API.Services
             return _authorContext.Authors.Any(a => a.Id == authorID);
         }
 
-        public void CreateAuthor(Author author)
+        public bool CreateAuthor(Author author)
         {
             _authorContext.Authors.Add(author);
+            return SaveChanges();
         }
 
         public bool DeleteAuthor(Author author)

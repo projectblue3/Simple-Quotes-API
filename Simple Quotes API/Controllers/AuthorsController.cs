@@ -124,8 +124,11 @@ namespace Simple_Quotes_API.Controllers
                 return StatusCode(422, ModelState);
             }
 
-            _authorRepo.CreateAuthor(authorToCreate);
-            _authorRepo.SaveChanges();
+            if (!_authorRepo.CreateAuthor(authorToCreate))
+            {
+                ModelState.AddModelError("AuthorCreationError", $"Something went wrong creating the author");
+                return StatusCode(500, ModelState);
+            }
 
             return CreatedAtRoute(nameof(GetAuthorById), new { authorId = authorToCreate.Id }, authorToCreate);
         }
