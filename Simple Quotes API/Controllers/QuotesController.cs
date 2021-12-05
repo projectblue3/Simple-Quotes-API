@@ -88,20 +88,27 @@ namespace Simple_Quotes_API.Controllers
                 AuthorId = quoteCreateDto.AuthorId
             };
 
+            var authorItem = _authorRepo.GetAuthor(quoteCreateDto.AuthorId);
+
             if (quoteToCreate == null)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (authorItem == null)
+            {
+                return BadRequest("Author Not Valid");
             }
 
             if (_quoteRepo.QuoteExists(quoteToCreate.Text))
             {
                 ModelState.AddModelError("QuoteExists", "This quote already exists");
                 return StatusCode(422, ModelState);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
             }
 
             if (!_quoteRepo.CreateQuote(quoteToCreate))
@@ -123,9 +130,6 @@ namespace Simple_Quotes_API.Controllers
             {
                 return NotFound();
             }
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
 
             if (!_quoteRepo.DeleteQuote(quoteToDelete))
             {

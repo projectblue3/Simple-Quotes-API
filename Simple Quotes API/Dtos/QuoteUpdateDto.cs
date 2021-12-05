@@ -12,8 +12,5 @@ namespace Simple_Quotes_API.Dtos
         [Required]
         [MaxLength(1000)]
         public string Text { get; set; }
-
-        [Required]
-        public int AuthorId { get; set; }
     }
 }

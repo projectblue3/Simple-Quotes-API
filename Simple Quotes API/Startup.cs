@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Newtonsoft.Json.Serialization;
+using Simple_Quotes_API.Middleware;
 
 namespace Simple_Quotes_API
 {
@@ -56,9 +57,11 @@ namespace Simple_Quotes_API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionHandler>();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple_Quotes_API v1"));
             }

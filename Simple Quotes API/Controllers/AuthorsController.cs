@@ -124,6 +124,11 @@ namespace Simple_Quotes_API.Controllers
                 return StatusCode(422, ModelState);
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (!_authorRepo.CreateAuthor(authorToCreate))
             {
                 ModelState.AddModelError("AuthorCreationError", $"Something went wrong creating the author");
@@ -149,9 +154,6 @@ namespace Simple_Quotes_API.Controllers
                 ModelState.AddModelError("AuthorDeleteError","Cannot delete an author who has quotes");
                 return StatusCode(409, ModelState);
             }
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
 
             if (!_authorRepo.DeleteAuthor(authorToDelete))
             {
