@@ -46,7 +46,11 @@ namespace Simple_Quotes_API.Controllers
                 authorReadDtos.Add(new AuthorReadDto
                 {
                     Id = author.Id,
-                    Name = author.Name
+                    Name = author.Name,
+                    DateOfBirth = author.DateOfBirth,
+                    DateOfDeath = author.DateOfDeath,
+                    Occupation = author.Occupation,
+                    Bio = author.Bio
                 });
             }
 
@@ -68,6 +72,10 @@ namespace Simple_Quotes_API.Controllers
             {
                 Id = authorItem.Id,
                 Name = authorItem.Name,
+                DateOfBirth = authorItem.DateOfBirth,
+                DateOfDeath = authorItem.DateOfDeath,
+                Occupation = authorItem.Occupation,
+                Bio = authorItem.Bio
             };
 
             return Ok(authorReadDto);
@@ -110,7 +118,11 @@ namespace Simple_Quotes_API.Controllers
         {
             Author authorToCreate = new Author()
             {
-                Name = authorCreateDto.Name.Trim()
+                Name = authorCreateDto.Name.Trim(),
+                DateOfBirth = authorCreateDto.DateOfBirth.Trim(),
+                DateOfDeath = authorCreateDto.DateOfDeath.Trim(),
+                Occupation = authorCreateDto.Occupation.Trim(),
+                Bio = authorCreateDto.Bio.Trim()
             };
 
             if (authorToCreate == null)
