@@ -151,7 +151,7 @@ namespace Simple_Quotes_API.Controllers
         }
 
         //DELETE api/authors/id
-        [HttpDelete]
+        [HttpDelete("{authorId}")]
         public IActionResult DeleteAuthor(int authorId)
         {
             var authorToDelete = _authorRepo.GetAuthor(authorId);

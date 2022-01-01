@@ -1,3 +1,4 @@
 ﻿Maybe convert to async
 Implement search
 maybe combine author and author quotes routes
+implement log
