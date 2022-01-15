@@ -9,6 +9,7 @@ namespace Simple_Quotes_API.Services
     public interface IQuoteRepo
     {
         ICollection<Quote> GetQuotes();
+        ICollection<Quote> GetSearch(string queryTerms);
         Quote GetQuote(int quoteId);
         bool QuoteExists(string quoteText);
         bool QuoteExists(int quoteId);

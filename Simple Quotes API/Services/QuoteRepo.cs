@@ -36,6 +36,11 @@ namespace Simple_Quotes_API.Services
             return _quoteContext.Quotes.Include(q => q.Author).ToList();
         }
 
+        public ICollection<Quote> GetSearch(string searchTerms)
+        {
+            return _quoteContext.Quotes.Where(q => q.Text.Contains(searchTerms) || q.Author.Name.Contains(searchTerms)).Include(q => q.Author).ToList();
+        }
+
         public bool QuoteExists(string quoteText)
         {
             return _quoteContext.Quotes.Any(q => q.Text == quoteText);

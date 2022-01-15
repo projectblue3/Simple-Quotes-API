@@ -94,7 +94,8 @@ namespace Simple_Quotes_API.Controllers
 
             if (quoteItems.Count == 0)
             {
-                return Ok("No Items");
+                List<string> noItems = new List<string>();
+                return Ok(noItems);
             }
 
             var quoteAuthorDto = new List<QuoteAuthorDto>();

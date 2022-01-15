@@ -30,9 +30,17 @@ namespace Simple_Quotes_API.Controllers
 
         //GET api/quotes
         [HttpGet]
-        public IActionResult GetQuotes()
+        public IActionResult GetQuotes([FromQuery]string searchTerms)
         {
-            var quoteItems = _quoteRepo.GetQuotes();
+            ICollection<Quote> quoteItems = new List<Quote>();
+
+            if (searchTerms != null)
+            {
+                quoteItems = _quoteRepo.GetSearch(searchTerms);
+            } else
+            {
+                quoteItems = _quoteRepo.GetQuotes();
+            } 
 
             if (quoteItems.Count == 0)
             {
