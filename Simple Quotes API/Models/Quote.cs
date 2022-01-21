@@ -17,6 +17,8 @@ namespace Simple_Quotes_API.Models
         [MaxLength(1000)]
         public string Text { get; set; }
 
+        public bool? IsFeatured { get; set; }
+
         [ForeignKey("Author")]
         [Required]
         public int AuthorId { get; set; }

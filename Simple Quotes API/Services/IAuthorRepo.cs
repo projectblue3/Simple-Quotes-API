@@ -9,6 +9,7 @@ namespace Simple_Quotes_API.Services
     public interface IAuthorRepo
     {
         ICollection<Author> GetAuthors();
+        ICollection<Author> GetFeaturedAuthors();
         Author GetAuthor(int authorID);
         Author GetAuthor(string authorName);
         ICollection<Quote> GetQuotesByAuthor(int authorID);

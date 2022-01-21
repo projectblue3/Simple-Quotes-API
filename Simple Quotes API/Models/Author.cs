@@ -33,6 +33,8 @@ namespace Simple_Quotes_API.Models
         [MaxLength(512)]
         public string Bio { get; set; }
 
+        public bool? IsFeatured { get; set; }
+
         public ICollection<Quote> Quotes { get; set; }
     }
 }

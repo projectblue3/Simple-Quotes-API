@@ -14,5 +14,6 @@ namespace Simple_Quotes_API.Dtos
         public string DateOfDeath { get; set; }
         public string Occupation { get; set; }
         public string Bio { get; set; }
+        public bool? IsFeatured { get; set; }
     }
 }

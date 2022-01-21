@@ -13,6 +13,8 @@ namespace Simple_Quotes_API.Dtos
         [MaxLength(1000)]
         public string Text { get; set; }
 
+        public bool? IsFeatured { get; set; }
+
         [Required]
         public int AuthorId { get; set; }
     }

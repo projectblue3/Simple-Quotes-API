@@ -23,6 +23,8 @@ namespace Simple_Quotes_API.Dtos
         [MaxLength(64)]
         public string Occupation { get; set; }
 
+        public bool? IsFeatured { get; set; }
+
         [Required]
         [MaxLength(512)]
         public string Bio { get; set; }

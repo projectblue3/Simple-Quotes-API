@@ -26,6 +26,11 @@ namespace Simple_Quotes_API.Services
             return SaveChanges();
         }
 
+        public ICollection<Quote> GetFeaturedQuotes()
+        {
+            return _quoteContext.Quotes.Where(q => q.IsFeatured == true).Include(q => q.Author).ToList();
+        }
+
         public Quote GetQuote(int quoteId)
         {
             return _quoteContext.Quotes.Where(q => q.Id == quoteId).Include(q => q.Author).FirstOrDefault();

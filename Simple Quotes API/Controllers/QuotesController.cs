@@ -34,10 +34,15 @@ namespace Simple_Quotes_API.Controllers
         {
             ICollection<Quote> quoteItems = new List<Quote>();
 
-            if (searchTerms != null)
+            if (searchTerms != null && searchTerms != "isFeatured")
             {
                 quoteItems = _quoteRepo.GetSearch(searchTerms);
-            } else
+            }
+            else if (searchTerms != null && searchTerms == "isFeatured")
+            {
+                quoteItems = _quoteRepo.GetFeaturedQuotes();
+            }
+            else
             {
                 quoteItems = _quoteRepo.GetQuotes();
             } 
@@ -56,7 +61,8 @@ namespace Simple_Quotes_API.Controllers
                     Id = quote.Id,
                     Text = quote.Text,
                     AuthorId = quote.Author.Id,
-                    AuthorName = quote.Author.Name
+                    AuthorName = quote.Author.Name,
+                    IsFeatured = quote.IsFeatured
                 });
             }
 
@@ -79,7 +85,8 @@ namespace Simple_Quotes_API.Controllers
                 Id = quoteItem.Id,
                 Text = quoteItem.Text,
                 AuthorId = quoteItem.Author.Id,
-                AuthorName = quoteItem.Author.Name
+                AuthorName = quoteItem.Author.Name,
+                IsFeatured = quoteItem.IsFeatured
             };
 
             return Ok(quoteReadDto);
@@ -93,7 +100,8 @@ namespace Simple_Quotes_API.Controllers
             Quote quoteToCreate = new Quote()
             {
                 Text = quoteCreateDto.Text.Trim(),
-                AuthorId = quoteCreateDto.AuthorId
+                AuthorId = quoteCreateDto.AuthorId,
+                IsFeatured = quoteCreateDto.IsFeatured
             };
 
             var authorItem = _authorRepo.GetAuthor(quoteCreateDto.AuthorId);

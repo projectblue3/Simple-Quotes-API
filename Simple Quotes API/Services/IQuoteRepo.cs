@@ -10,6 +10,7 @@ namespace Simple_Quotes_API.Services
     {
         ICollection<Quote> GetQuotes();
         ICollection<Quote> GetSearch(string queryTerms);
+        ICollection<Quote> GetFeaturedQuotes();
         Quote GetQuote(int quoteId);
         bool QuoteExists(string quoteText);
         bool QuoteExists(int quoteId);

@@ -52,6 +52,11 @@ namespace Simple_Quotes_API.Services
             return _authorContext.Authors.Include(a => a.Quotes).ToList();
         }
 
+        public ICollection<Author> GetFeaturedAuthors()
+        {
+            return _authorContext.Authors.Where(a => a.IsFeatured == true).Include(a => a.Quotes).ToList();
+        }
+
         public ICollection<Quote> GetQuotesByAuthor(int authorID)
         {
             return _authorContext.Quotes.Where(a => a.Author.Id == authorID).Include(q => q.Author).ToList();

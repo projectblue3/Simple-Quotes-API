@@ -11,5 +11,6 @@ namespace Simple_Quotes_API.Dtos
         public string Text { get; set; }
 
         public string AuthorName { get; set; }
+        public bool? IsFeatured { get; set; }
     }
 }

@@ -27,5 +27,6 @@ namespace Simple_Quotes_API.Dtos
         [MaxLength(512)]
         public string Bio { get; set; }
 
+        public bool? IsFeatured { get; set; }
     }
 }

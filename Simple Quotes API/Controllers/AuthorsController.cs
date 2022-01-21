@@ -30,9 +30,18 @@ namespace Simple_Quotes_API.Controllers
 
         //GET api/authors
         [HttpGet]
-        public IActionResult GetAuthors()
+        public IActionResult GetAuthors([FromQuery] string searchTerms)
         {
-            var authorItems = _authorRepo.GetAuthors();
+            ICollection<Author> authorItems = new List<Author>();
+
+            if (searchTerms == "isFeatured")
+            {
+                authorItems = _authorRepo.GetFeaturedAuthors();
+            }
+            else
+            {
+                authorItems = _authorRepo.GetAuthors();
+            }
 
             if (authorItems.Count == 0)
             {
@@ -50,7 +59,8 @@ namespace Simple_Quotes_API.Controllers
                     DateOfBirth = author.DateOfBirth,
                     DateOfDeath = author.DateOfDeath,
                     Occupation = author.Occupation,
-                    Bio = author.Bio
+                    Bio = author.Bio,
+                    IsFeatured = author.IsFeatured
                 });
             }
 
@@ -75,7 +85,8 @@ namespace Simple_Quotes_API.Controllers
                 DateOfBirth = authorItem.DateOfBirth,
                 DateOfDeath = authorItem.DateOfDeath,
                 Occupation = authorItem.Occupation,
-                Bio = authorItem.Bio
+                Bio = authorItem.Bio,
+                IsFeatured = authorItem.IsFeatured
             };
 
             return Ok(authorReadDto);
@@ -106,7 +117,8 @@ namespace Simple_Quotes_API.Controllers
                 {
                     Id = quote.Id,
                     Text = quote.Text,
-                    AuthorName = quote.Author.Name
+                    AuthorName = quote.Author.Name,
+                    IsFeatured = quote.IsFeatured
                 });
             }
 
@@ -123,7 +135,8 @@ namespace Simple_Quotes_API.Controllers
                 DateOfBirth = authorCreateDto.DateOfBirth.Trim(),
                 DateOfDeath = authorCreateDto.DateOfDeath.Trim(),
                 Occupation = authorCreateDto.Occupation.Trim(),
-                Bio = authorCreateDto.Bio.Trim()
+                Bio = authorCreateDto.Bio.Trim(),
+                IsFeatured = authorCreateDto.IsFeatured
             };
 
             if (authorToCreate == null)
