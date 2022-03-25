@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Simple_Quotes_API.Dtos;
 using Simple_Quotes_API.Models;
 using Simple_Quotes_API.Services;
@@ -49,10 +51,12 @@ namespace Simple_Quotes_API.Controllers
 
             if (quoteItems.Count == 0)
             {
-                return Ok("No Items");
+                List<string> noItems = new List<string>();
+                
+                return Ok(noItems);
             }
 
-            var quoteReadDtos = new List<QuoteReadDto>();
+            ICollection<QuoteReadDto> quoteReadDtos = new List<QuoteReadDto>();
 
             foreach(var quote in quoteItems)
             {
@@ -66,7 +70,7 @@ namespace Simple_Quotes_API.Controllers
                 });
             }
 
-            return Ok(quoteReadDtos);
+            return Ok(quoteReadDtos.OrderBy(q => q.AuthorName).ToList());
         }
 
         //GET api/quotes/id

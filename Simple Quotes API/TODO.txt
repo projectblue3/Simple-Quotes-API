@@ -1,3 +1,2 @@
 ﻿Maybe convert to async
 maybe combine author and author quotes routes
-implement log

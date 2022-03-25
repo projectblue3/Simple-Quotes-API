@@ -45,10 +45,11 @@ namespace Simple_Quotes_API.Controllers
 
             if (authorItems.Count == 0)
             {
-                return Ok("No Items");
+                List<string> noItems = new List<string>();
+                return Ok(noItems);
             }
 
-            var authorReadDtos = new List<AuthorReadDto>();
+            ICollection<AuthorReadDto> authorReadDtos = new List<AuthorReadDto>();
 
             foreach (var author in authorItems)
             {
@@ -64,7 +65,7 @@ namespace Simple_Quotes_API.Controllers
                 });
             }
 
-            return Ok(authorReadDtos);
+            return Ok(authorReadDtos.OrderBy(a => a.Name).ToList());
         }
 
         //GET api/authors/id
@@ -109,7 +110,7 @@ namespace Simple_Quotes_API.Controllers
                 return Ok(noItems);
             }
 
-            var quoteAuthorDto = new List<QuoteAuthorDto>();
+            ICollection<QuoteAuthorDto> quoteAuthorDto = new List<QuoteAuthorDto>();
 
             foreach (var quote in quoteItems)
             {
