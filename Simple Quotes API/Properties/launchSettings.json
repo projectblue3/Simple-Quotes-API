@@ -17,6 +17,7 @@
       "commandName": "IISExpress",
       "launchUrl": "swagger",
       "environmentVariables": {
+        "QuotesCS": "Server=localhost,1433;Initial Catalog=QuotesDB;User ID=QuotesAdmin;Password=abc123;",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

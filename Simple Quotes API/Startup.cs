@@ -31,8 +31,10 @@ namespace Simple_Quotes_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Configuration.GetConnectionString("QuotesCS");
+
             services.AddDbContext<QuotesDbContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("QuotesCS")));
+                options.UseSqlServer(connectionString));
 
             services.AddMvc()
                     .AddNewtonsoftJson(o => {
@@ -43,15 +45,25 @@ namespace Simple_Quotes_API
                             new CamelCasePropertyNamesContractResolver();
                     });
 
-            services.AddSwaggerGen(c =>
+            /*services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Simple_Quotes_API", Version = "v1" });
-            });
+            });*/
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IAuthorRepo, AuthorRepo>();
             services.AddScoped<IQuoteRepo, QuoteRepo>();
+
+            services.Configure<ApiBehaviorOptions>(apiBehaviorOptions => 
+                apiBehaviorOptions.InvalidModelStateResponseFactory = actionContext => {
+                    return new BadRequestObjectResult(new
+                    {
+                        Messages = actionContext.ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => x.ErrorMessage)
+                    });
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,12 +72,12 @@ namespace Simple_Quotes_API
             app.UseMiddleware<LogHandler>();
             app.UseMiddleware<ExceptionHandler>();
 
-            if (env.IsDevelopment())
+            /*if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple_Quotes_API v1"));
-            }
+            }*/
 
             app.UseHttpsRedirection();
 

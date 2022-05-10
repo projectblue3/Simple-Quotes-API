@@ -28,14 +28,33 @@ namespace Simple_Quotes_API.Middleware
             {
                 var exceptionType = ex.GetType();
 
-                //break up exceptions this way
-                //if(exceptionType == typeof(blah))
-                //{
+                //Item does not exists
+                if(exceptionType == typeof(DeletionException))
+                {
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
 
-                //}
+                //ModelState is invalid
+                else if (exceptionType == typeof(UpdateException))
+                {
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
 
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                //Internal creation error
+                else if (exceptionType == typeof(CreationException))
+                {
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                }
+
+                //All other errors
+                else
+                {
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                }
 
                 await context.Response.WriteAsync(new ApiError
                 {

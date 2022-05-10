@@ -122,19 +122,14 @@ namespace Simple_Quotes_API.Controllers
 
             if (authorItem == null)
             {
-                return BadRequest("Author Not Valid");
-            }
-
-            if (_quoteRepo.QuoteExists(quoteToCreate.Text))
-            {
-                ModelState.AddModelError("QuoteExists", "This quote already exists");
-                return StatusCode(422, ModelState);
+                ModelState.AddModelError("AuthorNotFoundError", "Author cannot be found");
+                return StatusCode(409, new { messages = new List<string>() { "Author cannot be found" } });
             }
 
             if (!_quoteRepo.CreateQuote(quoteToCreate))
             {
                 ModelState.AddModelError("QuoteCreationError", $"Something went wrong creating the quote");
-                return StatusCode(500, ModelState);
+                throw new CreationException("Something went wrong creating the quote");
             }
 
             return CreatedAtRoute(nameof(GetQuoteById), new { quoteId = quoteToCreate.Id }, quoteToCreate);
@@ -154,7 +149,7 @@ namespace Simple_Quotes_API.Controllers
             if (!_quoteRepo.DeleteQuote(quoteToDelete))
             {
                 ModelState.AddModelError("QuoteDeleteError", $"Something went wrong deleting quote");
-                return StatusCode(500, ModelState);
+                throw new DeletionException("Something went wrong deleting the quote");
             }
 
             return NoContent();
@@ -180,7 +175,11 @@ namespace Simple_Quotes_API.Controllers
 
             if (!TryValidateModel(quoteToUpdate))
             {
-                return ValidationProblem(ModelState);
+                return BadRequest(new
+                {
+                    Messages = ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => x.ErrorMessage)
+                });
             }
 
             _mapper.Map(quoteToUpdate, repoQuote);
@@ -188,7 +187,7 @@ namespace Simple_Quotes_API.Controllers
             if (!_quoteRepo.UpdateQuote())
             {
                 ModelState.AddModelError("QuoteUpdateError", $"Something went wrong updating quote");
-                return StatusCode(500, ModelState);
+                throw new UpdateException("Something went wrong updating the quote");
             }
 
             return NoContent();

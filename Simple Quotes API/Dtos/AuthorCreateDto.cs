@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Simple_Quotes_API.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Simple_Quotes_API.Dtos
 {
-    public class AuthorCreateDto
+    public class AuthorCreateDto : ValidationAttribute
     {
         [Required]
         [MaxLength(250)]
+        [ValidateAuthorExistence(ErrorMessage = "This author already exists")]
         public string Name { get; set; }
 
         [Required]

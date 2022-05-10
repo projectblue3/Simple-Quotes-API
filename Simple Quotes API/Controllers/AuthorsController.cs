@@ -145,12 +145,6 @@ namespace Simple_Quotes_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_authorRepo.AuthorExists(authorToCreate.Name))
-            {
-                ModelState.AddModelError("AuthorExists", "This author already exists");
-                return StatusCode(422, ModelState);
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -159,7 +153,7 @@ namespace Simple_Quotes_API.Controllers
             if (!_authorRepo.CreateAuthor(authorToCreate))
             {
                 ModelState.AddModelError("AuthorCreationError", $"Something went wrong creating the author");
-                return StatusCode(500, ModelState);
+                throw new CreationException("Something went wrong creating the author");
             }
 
             return CreatedAtRoute(nameof(GetAuthorById), new { authorId = authorToCreate.Id }, authorToCreate);
@@ -179,13 +173,13 @@ namespace Simple_Quotes_API.Controllers
             if (_authorRepo.GetQuotesByAuthor(authorId).Count() > 0)
             {
                 ModelState.AddModelError("AuthorDeleteError","Cannot delete an author who has quotes");
-                return StatusCode(409, ModelState);
+                return StatusCode(409, new { messages = new List<string>() { "Cannot delete an author who has quotes" } });
             }
 
             if (!_authorRepo.DeleteAuthor(authorToDelete))
             {
                 ModelState.AddModelError("AuthorDeleteError", $"Something went wrong deleting the author");
-                return StatusCode(500, ModelState);
+                throw new DeletionException("Something went wrong deleting the author");
             }
 
             return NoContent();
@@ -207,11 +201,17 @@ namespace Simple_Quotes_API.Controllers
             authorPatch.ApplyTo(authorToUpdate, ModelState);
 
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             if (!TryValidateModel(authorToUpdate))
             {
-                return ValidationProblem(ModelState);
+                return BadRequest(new
+                {
+                    Messages = ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => x.ErrorMessage)
+                });
             }
 
             _mapper.Map(authorToUpdate, repoAuthor);
@@ -219,7 +219,7 @@ namespace Simple_Quotes_API.Controllers
             if (!_authorRepo.UpdateAuthor())
             {
                 ModelState.AddModelError("AuthorUpdateError", $"Something went wrong updating the author");
-                return StatusCode(500, ModelState);
+                throw new UpdateException("Something went wrong updating the author");
             }
 
             return NoContent();

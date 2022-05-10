@@ -11,6 +11,7 @@ namespace Simple_Quotes_API.Dtos
     {
         [Required]
         [MaxLength(1000)]
+        [ValidateQuoteExistence(ErrorMessage = "This quote already exists")]
         public string Text { get; set; }
 
         public bool? IsFeatured { get; set; }

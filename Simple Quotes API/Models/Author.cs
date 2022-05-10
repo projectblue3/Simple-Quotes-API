@@ -16,6 +16,7 @@ namespace Simple_Quotes_API.Models
 
         [Required]
         [MaxLength(250)]
+        [ValidateAuthorExistence(ErrorMessage = "This author already exists")]
         public string Name { get; set; }
 
         [Required]
