@@ -50,6 +50,15 @@ namespace Simple_Quotes_API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Simple_Quotes_API", Version = "v1" });
             });*/
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    //open, not safe
+                    builder.WithOrigins("*");
+                });
+            });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IAuthorRepo, AuthorRepo>();
@@ -82,6 +91,8 @@ namespace Simple_Quotes_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
