@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Simple_Quotes_API</RootNamespace>
+    <UserSecretsId>296b0f25-81be-47c6-8852-ae7b13179d3d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

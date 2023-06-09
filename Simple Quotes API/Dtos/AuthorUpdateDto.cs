@@ -11,7 +11,7 @@ namespace Simple_Quotes_API.Dtos
     {
         [Required]
         [MaxLength(250)]
-        [ValidateAuthorExistence(ErrorMessage = "This author already exists")]
+        //[ValidateAuthorExistence(ErrorMessage = "This author already exists")]
         public string Name { get; set; }
 
         [Required]

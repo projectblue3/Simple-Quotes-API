@@ -55,7 +55,7 @@ namespace Simple_Quotes_API
                 options.AddDefaultPolicy(builder =>
                 {
                     //open, not safe
-                    builder.WithOrigins("*");
+                    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
                 });
             });
 
